@@ -66,76 +66,46 @@
 
 // export default api
 
-
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { config as appConfig } from "./config";
-
-// Base URL from config (config.js already uses env with fallback)
-const baseURL = (appConfig.base_api_url || "").replace(/\/+$/, ""); // remove trailing /
+import { config } from "./config";
 
 const api = axios.create({
-  baseURL,
+  baseURL: config.base_api_url,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
   },
   timeout: 60000,
-  withCredentials: false, // keep false for Bearer-token API
+  withCredentials: false,
 });
 
-// Request interceptor: attach Bearer token (if exists)
 api.interceptors.request.use(
   (req) => {
     const token = localStorage.getItem("token");
-    if (token) {
-      req.headers.Authorization = `Bearer ${token}`;
-    }
-
-    // Optional: CSRF header (only useful if you later switch to Sanctum cookie auth)
-    const csrf = document
-      .querySelector('meta[name="csrf-token"]')
-      ?.getAttribute("content");
-    if (csrf) {
-      req.headers["X-CSRF-TOKEN"] = csrf;
-    }
-
+    if (token) req.headers.Authorization = `Bearer ${token}`;
     return req;
   },
   (error) => Promise.reject(error)
 );
 
-// Response interceptor: handle common errors
 api.interceptors.response.use(
-  (response) => response,
+  (res) => res,
   (error) => {
-    // If server didn't respond (network/CORS/timeout)
     if (!error.response) {
-      const msg =
-        error.code === "ECONNABORTED"
-          ? "Request timeout. Please try again."
-          : "Network error. Please check your connection.";
-      toast.error(msg);
+      toast.error("Network error. Please check your connection.");
       return Promise.reject(error);
     }
 
-    const { status } = error.response;
-    const url = error.config?.url || "";
+    const status = error.response.status;
 
-    // 401: token invalid/expired (avoid redirect for auth endpoints)
-    if (status === 401 && !url.includes("/auth/") && !url.includes("/login")) {
+    if (status === 401 && !error.config?.url?.includes("/auth/")) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       toast.error("Your session has expired. Please login again.");
       window.location.assign("/login");
-      return Promise.reject(error);
-    }
-
-    if (status === 403) {
-      toast.error("You do not have permission to perform this action.");
-    } else if (status === 404) {
-      // optional: comment out if too noisy
-      // toast.error("Resource not found.");
+    } else if (status === 403) {
+      toast.error("You do not have permission to perform this action");
     } else if (status >= 500) {
       toast.error("Server error. Please try again later.");
     }

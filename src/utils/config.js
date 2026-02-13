@@ -5,11 +5,12 @@
 //     ? "http://localhost:8000/api/" 
 //     : "");
     
-
+// // const STORAGE_BASE_URL = import.meta.env.VITE_STORAGE_BASE_URL ||
 //   (isDevelopment
 //     ? "http://localhost:8000/storage/"
 //     : "");
 
+// // export const config = {
 
 
 // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -25,18 +26,15 @@
 //   pagination_limit: 10,
 // };
 
-
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  "http://localhost:8000/api";
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
 
 const STORAGE_BASE_URL =
-  import.meta.env.VITE_STORAGE_BASE_URL ||
-  "http://localhost:8000/storage";
+  import.meta.env.VITE_STORAGE_BASE_URL || "http://localhost:8000/storage";
 
 export const config = {
-  base_api_url: API_BASE_URL,
-  base_image_url: STORAGE_BASE_URL,
+  base_api_url: API_BASE_URL.replace(/\/+$/, ""),      // remove trailing /
+  base_image_url: STORAGE_BASE_URL.replace(/\/+$/, ""), // remove trailing /
   app_name: "Inventory Management System",
   app_version: "1.0.0",
   currency: "$",
