@@ -45,9 +45,9 @@ const ReportsPage = () => {
   const getDefaultDateRange = () => {
     const today = new Date();
     // Set to end of 2025 to include all November imports (Nov 06, Nov 13)
-    const endOf2025 = new Date("2025-12-31");
+    const endOf2025 = new Date("2027-12-31");
     return {
-      from: "2024-01-01", // Start from 2024 to include all data
+      from: "2026-01-01", // Start from 2024 to include all data
       to: endOf2025.toISOString().split("T")[0], // End of 2025 to include November imports
     };
   };
@@ -1007,7 +1007,7 @@ const ReportsPage = () => {
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               📤 Export Sales Reports
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 w-[100px] lg:grid-cols-6 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3  lg:grid-cols-6 gap-3">
               <ExportButton
                 type="sales"
                 format="xlsx"

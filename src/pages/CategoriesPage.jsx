@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Plus, Search, Edit, Trash2, Grid, List, Image, X, Upload } from 'lucide-react'
+import { Plus, Search, Edit, Trash2, Grid, List, Image, X, Upload, Package } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
 import { categoryService } from '../services/categoryService'
+import { config } from '../utils/config'
 
 const CategoriesPage = () => {
   const { hasPermission } = useAuth()
@@ -395,9 +396,9 @@ const CategoriesPage = () => {
             {filteredCategories.map(category => (
               <div key={category.id} className="bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="h-48 bg-gray-100 flex items-center justify-center overflow-hidden border-b border-gray-200">
-                  {getImageUrl(category) ? (
+                  {category.image_url || category.image ? (
                     <img
-                      src={getImageUrl(category)}
+                      src={category.image || getImageUrl(category.image, config.base_image_url)}
                       alt={category.cat_name || category.name}
                       className="w-full h-full object-cover"
                       onError={(e) => {
@@ -406,7 +407,7 @@ const CategoriesPage = () => {
                       }}
                     />
                   ) : (
-                    <Image className="w-12 h-12 text-gray-400" />
+                    <Package className="w-12 h-12 text-gray-400" />
                   )}
                 </div>
 

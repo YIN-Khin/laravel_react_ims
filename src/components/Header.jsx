@@ -42,7 +42,7 @@ const Header = ({ onMenuClick, toggleSidebar }) => {
   }, []);
 
   return (
-    <header className="bg-gradient-to-r from-primary-600 to-primary-500 shadow-lg border-b text-white border-primary-500 sticky top-0 z-40 backdrop-blur-sm">
+    <header className="bg-gradient-to-r from-primary-400 to-primary-400 shadow-lg border-b text-white border-primary-500 sticky top-0 z-40 backdrop-blur-sm">
       <div className="flex items-center justify-between px-3 sm:px-4 md:px-6 py-3 sm:py-4">
         <div className="flex items-center min-w-0 flex-1">
           <button

@@ -172,6 +172,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           icon: Download,
           path: "/reports#import",
           permission: "read",
+          visible: ['admin', 'manager', 'inventory'].includes(user.role)
         },
         {
           name: "Sales Report",
